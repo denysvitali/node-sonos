@@ -1,93 +1,207 @@
-# node-sonos
+<h1 align="center">
+  <br>
+  <a href="https://github.com/bencevans/node-sonos"><img src="https://cdn.rawgit.com/bencevans/node-sonos/0f2775ab/logo.svg" alt="node-sonos logo" width="200"></a>
+  <br>
+  <br/>
+  node-sonos
+  <br>
+  <br>
+</h1>
 
-[![npm](http://img.shields.io/npm/v/sonos.svg?style=flat-square)](https://www.npmjs.org/package/sonos)
-[![build](http://img.shields.io/travis/bencevans/node-sonos/master.svg?style=flat-square)](https://travis-ci.org/bencevans/node-sonos)
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
+<p align="center">
+  <b>Control your Sonos devices with JavaScript (node.js)</b>
+</p>
 
-Node.js Interface to [Sonos](http://sonos.com)
+<p align="center">
+  <a href="https://travis-ci.org/bencevans/node-sonos">
+    <img src="http://img.shields.io/travis/bencevans/node-sonos/master.svg?style=flat-square"
+         alt="Travis Build">
+  </a>
+  <a href="https://www.npmjs.com/package/sonos">
+    <img src="https://img.shields.io/npm/v/sonos.svg?style=flat-square"
+         alt="NPM Version">
+  </a>
+  <a href="https://www.npmjs.com/package/sonos">
+    <img src="https://img.shields.io/npm/dm/sonos.svg?style=flat-square"
+         alt="NPM Downloads">
+  </a>
+  <a href="https://github.com/feross/standard">
+    <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square"
+         alt="Standard Codestyle">
+  </a>
+</p>
 
-Please open [pull-requests](https://github.com/bencevans/node-sonos) and ask questions [@bencevans](https://twitter.com/bencevans).
+**node-sonos** gives you the power to control all your Sonos devices from your own apps in JavaScript. Automatically discover your devices on the network and control the playback and queue with instant events announcing change.
+
+## Features
+
+* Device Discovery
+* Queue Control
+* Volume Control
+* Spotify Support
+* Radio
+* Change Events
+
+## Install
+
+Published versions (reccomended)
+
+    $ npm install sonos
+
+From the repo, living on the edge
+
+    $ npm install git://github.com/bencevans/node-sonos.git
+
+## Quick Start
+
+### Discovering Devices
+
+```js
+const { DeviceDiscovery } = require('sonos')
+
+// event on all found...
+DeviceDiscovery((device) => {
+  console.log('found device at ' + device.host)
+
+  // mute every device...
+  device.setMuted(true)
+    .then(`${device.host} now muted`)
+})
+
+// find one device
+DeviceDiscovery().once('DeviceAvailable', (device) => {
+  console.log('found device at ' + device.host)
+
+  // get topology
+  device.getTopology()
+    .then(console.log)
+})
+```
+
+
+### Controlling Known Devices
+
+```js
+const { Sonos } = require('sonos')
+
+const device = new Sonos('192.168.1.56');
+
+device.play()
+  .then(() => console.log('now playing'))
+
+device.getVolume()
+  .then((volume) => console.log(`current volume = ${volume}`))
+```
 
 ## API
 
-For detailed info read the [/API.md](https://github.com/bencevans/node-sonos/blob/master/API.md) file, else…
-
-* search([options], [deviceAvailableListener])
-* Class: Search([options])
+* DeviceDiscovery([options], [deviceAvailableListener])
+* Class: DeviceDiscovery([options])
   * Event: 'DeviceAvailable'
   * destroy()
 * Class: Sonos(host, [port])
-  * currentTrack(callback)
-  * deviceDescription(callback)
-  * flush(callback)
-  * getCurrentState(callback)
-  * getLEDState(callback)
-  * getMusicLibrary(search, options, callback)
-  * getMuted(callback)
-  * getTopology(callback)
-  * getVolume(callback)
-  * getZoneAttrs(callback)
-  * getZoneInfo(callback)
-  * getQueue(callback)
-  * next(callback)
+  * currentTrack()
+  * deviceDescription()
+  * flush()
+  * getCurrentState()
+  * getLEDState()
+  * getMusicLibrary(search, options)
+  * getMuted()
+  * getTopology()
+  * getVolume()
+  * getZoneAttrs()
+  * getZoneInfo()
+  * getQueue()
+  * next()
   * parseDIDL(didl)
-  * pause(callback)
-  * play(uri, callback)
-  * previous(callback)
-  * queue(uri, positionInQueue, callback)
-  * queueNext(uri, callback)
-  * request(endpoint, action, body, responseTag, callback)
-  * seek(seconds, callback)
-  * setLEDState(desiredState, callback)
-  * setMuted(muted, callback)
-  * setName(name, callback)
-  * setPlayMode(mode, callback)
-  * setVolume(volume, callback)
-  * stop(callback)
+  * pause()
+  * play(uri)
+  * togglePlayback()
+  * previous()
+  * queue(uri, positionInQueue)
+  * queueNext(uri)
+  * request(endpoint, action, body, responseTag)
+  * seek(seconds)
+  * setLEDState(desiredState)
+  * setMuted(muted)
+  * setName(name)
+  * getPlayMode()
+  * setPlayMode(mode)
+  * setVolume(volume)
+  * stop()
+  * setSpotifyRegion(region)
+  * alarmClockService()
+    * ListAlarms()
+    * PatchAlarm(id,options)
+    * SetAlarm(id,enabled)
+  * joinGroup(otherDeviceName)
+  * leaveGroup()
+  * startListening(options)
+  * stopListening()
+  * Event: 'CurrentTrack'
+  * Event: 'NextTrack'
+  * Event: 'PlayState' and 'PlaybackStopped'
+  * Event: 'AVTransport'
+  * Event: 'Volume'
+  * Event: 'Muted'
+  * Event: 'RenderingControl'
+
+## Documentation
+
+We tried to add jsdoc info to all functions, and generate documentation from it. [/docs](./docs/)
 
 ## Examples
 
-Additional examples can be found in the [/examples](https://github.com/bencevans/node-sonos/tree/master/examples) directory within the repository.
+Additional examples can be found in the [/examples](./examples) directory within the repository.
 
-## Installation
+## In The Wild
 
-*Via npm*
+node-sonos in use across the interwebs. Missing yours? [Add it](https://github.com/bencevans/node-sonos/edit/master/README.md) and send us a pull request!
 
-    npm install sonos
+### Apps
 
-*Via Git*
+* **[AirSonos](https://github.com/stephen/airsonos)** - Apple AirPlay (iOS, OS X) support to all Sonos devices on a network.
+* **[sonos-cli](https://github.com/bencevans/sonos-cli)** - Command Line Interface for Sonos
+* **[sonos2mqtt](https://github.com/svrooij/sonos2mqtt)** - Bridge between Sonos and an MQTT server
+* **[homebridge-zp](https://github.com/ebaauw/homebridge-zp)** - Homebridge plugin for Sonos ZonePlayer
+* **[ZenMusic](https://github.com/htilly/zenmusic)** - Control Sonos thru #Slack!
+* **[gladys-sonos](https://github.com/GladysProject/gladys-sonos)** - Control Sonos with [Gladys](https://github.com/GladysProject/Gladys) a Raspberry Pi Home Assistant
 
-    npm install git://github.com/bencevans/node-sonos.git
+### Writeups
+
+* **[How we gave our studio WWE-style entrances using iBeacons and Sonos](https://hackernoon.com/how-we-gave-our-studio-wwe-style-entrances-using-ibeacons-and-sonos-92dd2f54983)** - A technical run-down of using futuristic technology for sheer entertainment value
 
 ## Maintainers
 
 * Ben Evans (@bencevans)
 * Stephen Wan (@stephen)
 * Marshall T. Rose (@mrose17)
+* Stephan van Rooij (@svrooij)
 
 And a big thanks to all you other [contributors](https://github.com/bencevans/node-sonos/graphs/contributors)! Pull-requests are beautiful things.
 
+## Issues
+
+If you got discovered an issue with this library, please check the [issue-tracker](https://github.com/bencevans/node-sonos/issues). And [create](https://github.com/bencevans/node-sonos/issues/new) an issue if your problem isn't discovered by someone else. If you want to contribute something check out these ['help-wanted' issues](https://github.com/bencevans/node-sonos/labels/help-wanted).
+
+## Questions
+
+Do you have a question about this library, we are glad to help you [Ask Question](https://github.com/bencevans/node-sonos/issues/new?title=Question%3A%20%3CYour%20text%3E&body=%23%20Question%0A&labels=question&assignee=svrooij). You can see all questions [here](https://github.com/bencevans/node-sonos/issues?utf8=%E2%9C%93&q=label%3Aquestion+)
+
+### NPM publish
+
+We try to react to all pull-requests, but if you think we don't respond in time, please don't create a 'sonos-by-xyz' or a 'node-sonos-by-xyz' package on NPM. This might lead to people installing the wrong version.
+
+If you want to publish your own version, please do it as a [user-scoped](https://docs.npmjs.com/getting-started/scoped-packages) eg. `@svrooij/sonos` package.
+
+1. Change the top of the readme to state your specific changes.
+2. Change the `name` of the project to `@npm_username/sonos`
+3. Publish it to npm `npm publish --access=public`
+
+## Sonos v0.x
+
+At 30 jan 2018 we released an **promisified** version of **node-sonos**. The old version can be found in the [v0.x branch](https://github.com/bencevans/node-sonos/tree/v0.x). It won't get any new features, but it **might** get security updates.
+
 ## Licence
 
-(MIT Licence)
-
-    Copyright (c) 2012 Ben Evans
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be
-    included in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+MIT © [Ben Evans](https://bencevans.io)

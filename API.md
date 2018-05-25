@@ -1,7 +1,7 @@
 Sonos
 -----
 
-This module exports 3 items:
+This module exports 4 items:
 
     var sonos = require('sonos');
 
@@ -20,10 +20,17 @@ This module exports 3 items:
     // These aren't used internally by the module at all but may be useful
     // for more complex projects.
 
-###var Sonos = new sonos.Sonos(host, port)###
+    // sonos.SpotifyRegion - map with service IDs for different Spotify regions
+
+    var s = new sonos.Sonos('192.168.2.17')
+    s.setSpotifyRegion(sonos.SpotifyRegion.EU);
+    // OR (US is default)
+    s.setSpotifyRegion(sonos.SpotifyRegion.US);
+
+### var Sonos = new sonos.Sonos(host, port) ###
 
 Sonos "Class"
-####Parameters####
+#### Parameters ####
 
 * host *String* IP/DNS
 * port *Number* undefined
@@ -31,10 +38,10 @@ Sonos "Class"
 * * *
 
 
-###Sonos.prototype.request = function(endpoint, action, body, responseTag, callback)###
+### Sonos.prototype.request = function(endpoint, action, body, responseTag, callback) ###
 
 UPnP HTTP Request
-####Parameters####
+#### Parameters ####
 
 * endpoint *String* HTTP Path
 * action *String* UPnP Call/Function/Action
@@ -42,205 +49,280 @@ UPnP HTTP Request
 * responseTag *String* Expected Response Container XML Tag
 * callback *Function* (err, data)
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
-###Sonos.prototype.getMusicLibrary = function(search, options, callback)
+
+### Sonos.prototype.getMusicLibrary = function(search, options, callback)
 
 Get Music Library
-####Parameters
+#### Parameters
 
 * search *String* artists, albumArtists, albums, genres, composers, tracks, playlists, sonos_playlists, or share
 * options *Object* Default {start:0, total:100}
 * callback *Function* (err, data) data - {returned: {String}, total: {String}, items:[{title:{String}, uri: {String}}]}
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
-###Sonos.prototype.currentTrack = function(callback)###
+
+### Sonos.prototype.currentTrack = function(callback) ###
 
 Get Current Track
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, track)
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
-###Sonos.prototype.getCurrentState = function(callback)###
+
+### Sonos.prototype.getCurrentState = function(callback) ###
 
 Get current playback state
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, state)
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
 
-###Sonos.prototype.parseDIDL = function(didl)###
+### Sonos.prototype.parseDIDL = function(didl) ###
 
 Parse DIDL into track structure
-####Parameters####
+#### Parameters ####
 
 * didl *String* undefined
 
-####Returns####
+#### Returns ####
 
 *object* undefined
 * * *
 
 
-
-###Sonos.prototype.getVolume = function(callback)###
+### Sonos.prototype.getVolume = function(callback) ###
 
 Get Current Volume
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, volume)
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
 
-
-###Sonos.prototype.getMuted = function(callback)###
+### Sonos.prototype.getMuted = function(callback) ###
 
 Get Current Muted
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, muted)
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
 
+### Sonos.prototype.play = function(uri, callback) ###
 
-###Sonos.prototype.play = function(uri, callback)###
+Resumes Queue or adds provided url to queue and starts playing
+#### Parameters ####
 
-Resumes Queue or Plays Provided URI
-####Parameters####
-
-* uri *String* Optional - URI to a Audio Stream
+* uri *String* Optional - URI to Audio Stream, also supports Spotify resource ids (see notes)
 * callback *Function* (err, playing)
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
+
+#### Notes ####
+```text
+spotify:track:<id>
+spotify:album:<id>
+spotify:artistTopTracks:<id>
+spotify:user:<userid>:playlist:<id>
+```
+* * *
+
+### Sonos.prototype.playWithoutQueue = function(uri, callback) ###
+
+Plays an uri without using the queue
+#### Parameters ####
+
+* uri *String* Optional - URI to Audio Stream, also supports Spotify resource ids (see notes)
+* callback *Function* (err, playing)
+
+#### Returns ####
+
+*Void* undefined
+
+#### Notes ####
+```text
+spotify:track:<id>
+spotify:album:<id>
+spotify:artistTopTracks:<id>
+spotify:user:<userid>:playlist:<id>
+```
 * * *
 
 
-
-###Sonos.prototype.stop = function(callback)###
+### Sonos.prototype.stop = function(callback) ###
 
 Stop What's Playing
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, stopped)
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
 
-
-###Sonos.prototype.pause = function(callback)###
+### Sonos.prototype.pause = function(callback) ###
 
 Pause Current Queue
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, paused)
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
 
-
-###Sonos.prototype.seek = function(seconds, callback)###
+### Sonos.prototype.seek = function(seconds, callback) ###
 
 Seek the current track
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, seeked)
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
 
+### Sonos.prototype.selectTrack = function(trackNr, callback) ###
 
-###Sonos.prototype.next = function(callback)###
+Select specific track in queue
+#### Parameters ####
+
+* trackNr *Number* Number of track in queue (optional, indexed from 1)
+* callback *Function* (err, seeked)
+
+#### Returns ####
+
+*Void* undefined
+* * *
+
+
+### Sonos.prototype.next = function(callback) ###
 
 Play next in queue
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, movedToNext)
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
 
-
-###Sonos.prototype.previous = function(callback)###
+### Sonos.prototype.previous = function(callback) ###
 
 Play previous in queue
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, movedToPrevious)
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
 
-
-###Sonos.prototype.queueNext = function(uri, callback)###
+### Sonos.prototype.queueNext = function(uri, callback) ###
 
 Queue a Song Next
-####Parameters####
+#### Parameters ####
 
-* uri *String* URI to Audio Stream
+* uri *String* URI to Audio Stream, also supports Spotify resources ids (see play)
 * callback *Function* (err, queued)
 
-####Returns####
+#### Returns ####
 
 *[type]* undefined
 * * *
 
 
+### Sonos.prototype.playTuneinRadio = function(stationId, stationTitle, callback) ###
 
-###Sonos.prototype.queue = function(uri, positionInQueue, callback)###
+Directly plays a TuneIn station (queue isn't used)
+#### Parameters ####
+
+* stationId *String* tunein radio station id
+* stationTitle *String* tunein radio station title
+* callback *Function* (err, queued)
+
+#### Returns ####
+
+*[type]* undefined
+* * *
+
+
+### Sonos.prototype.playSpotifyRadio = function(artistId, artistName, callback) ###
+
+Starts playing the artists radio (queue isn't used)
+#### Parameters ####
+
+* artistId *String* Spotify Id to for artist (e.g. ```spotify:artist:<id>```)
+* artistName *String* Name of artist to use for radio station name
+* callback *Function* (err, queued)
+
+#### Returns ####
+
+*[type]* undefined
+* * *
+
+
+### Sonos.prototype.queue = function(uri, positionInQueue, callback) ###
 
 Add a song to the queue
-####Parameters####
+#### Parameters ####
 
-* uri *String* URI to Audio Stream
+* uri *String* URI to Audio Stream, also supports Spotify resource ids (see notes)
 * positionInQueue *Number* Position in queue at which to add song (optional, indexed from 1,
 defaults to end of queue, 0 to explicitly set end of queue)
 * callback *Function* (err, queued)
 
-####Returns####
+#### Returns ####
 
 *[type]* undefined
+
+#### Notes ####
+
+```text
+spotify:track:<id>
+spotify:album:<id>
+spotify:artistTopTracks:<id>
+spotify:user:<userid>:playlist:<id>
+```
 * * *
 
 ###Sonos.prototype.getQueue = function(callback)###
@@ -256,35 +338,41 @@ Get elements in queue
 * * *
 
 
-###Sonos.prototype.flush = function(callback)###
+* callback *Function* (err, data)
+
+#### Returns ####
+
+*[type]* undefined
+* * *
+
+
+### Sonos.prototype.flush = function(callback) ###
 
 Flush queue
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, flushed)
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
 
-
-###Sonos.prototype.getLEDState = function(callback)###
+### Sonos.prototype.getLEDState = function(callback) ###
 
 Get the LED State
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, state) state is a string, "On" or "Off"
 
 * * *
 
 
-
-###Sonos.prototype.setLEDState = function(desiredState, callback)###
+### Sonos.prototype.setLEDState = function(desiredState, callback) ###
 
 Set the LED State
-####Parameters####
+#### Parameters ####
 
 * desiredState *String* "On"/"Off"
 * callback *Function* (err)
@@ -292,168 +380,183 @@ Set the LED State
 * * *
 
 
-
-###Sonos.prototype.getZoneInfo = function(callback)###
+### Sonos.prototype.getZoneInfo = function(callback) ###
 
 Get Zone Info
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, info)
 
 * * *
 
 
-
-###Sonos.prototype.getZoneAttrs = function(callback)###
+### Sonos.prototype.getZoneAttrs = function(callback) ###
 
 Get Zone Attributes
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, data)
 
 * * *
 
 
-
-###Sonos.prototype.getTopology = function(callback)###
+### Sonos.prototype.getTopology = function(callback) ###
 
 Get Zones in contact with current Zone with Group Data
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, topology)
 
 * * *
 
 
-
-###Sonos.prototype.deviceDescription = function(callback)###
+### Sonos.prototype.deviceDescription = function(callback) ###
 
 Get Information provided by /xml/device_description.xml
-####Parameters####
+#### Parameters ####
 
 * callback *Function* (err, info)
 
 * * *
 
 
-
-###Sonos.prototype.setName = function(name, callback)###
+### Sonos.prototype.setName = function(name, callback) ###
 
 Set Name
-####Parameters####
+#### Parameters ####
 
 * name *String* undefined
 * callback *Function* (err, data)
 
-####Returns####
+#### Returns ####
 
 *[type]* undefined
 
 * * *
 
 
-
-###Sonos.prototype.setPlayMode = function(playmode, callback)###
+### Sonos.prototype.setPlayMode = function(playmode, callback) ###
 
 Set Play Mode
-####Parameters####
+#### Parameters ####
 
 * undefined *String* undefined
 * callback *Function* (err, data)
 
-####Returns####
+#### Returns ####
 
 *[type]* undefined
+
 * * *
 
 
-
-###Sonos.prototype.setVolume = function(volume, callback)###
+### Sonos.prototype.setVolume = function(volume, callback) ###
 
 Set Volume
-####Parameters####
+#### Parameters ####
 
 * volume *String* 0..100
 * callback *Function* (err, data)
 
-####Returns####
+#### Returns ####
 
 *[type]* undefined
+
 * * *
 
 
-
-###Sonos.prototype.setMuted = function(muted, callback)###
+### Sonos.prototype.setMuted = function(muted, callback) ###
 
 Set Muted
-####Parameters####
+#### Parameters ####
 
 * muted *Boolean* undefined
 * callback *Function* (err, data)
 
-####Returns####
+#### Returns ####
 
 *[type]* undefined
+
 * * *
 
 
 
-###Sonos.prototype.getFavoritesRadioStations = function(options, callback)
+### Sonos.prototype.getFavoritesRadioStations = function(options, callback)
 
 Get Favorites Radio Stations
-####Parameters
+#### Parameters
 
 * options *Object* Default {start:0, total:100}
 * callback *Function* (err, data) data - {returned: {String}, total: {String}, items:[{title:{String}, uri: {String}}]}
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
 
 
-###Sonos.prototype.getFavoritesRadioShows = function(options, callback)
+### Sonos.prototype.getFavoritesRadioShows = function(options, callback)
 
 Get Favorites Radio Shows
-####Parameters
+#### Parameters
 
 * options *Object* Default {start:0, total:100}
 * callback *Function* (err, data) data - {returned: {String}, total: {String}, items:[{title:{String}, uri: {String}}]}
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
 
 
-###Sonos.prototype.getFavoritesRadio = function(favoriteRadioType, options, callback)
+### Sonos.prototype.getFavoritesRadio = function(favoriteRadioType, options, callback)
 
 Get Favorites Radio for a given type
-####Parameters
+#### Parameters
 
 * favoriteRadioType *String* stations, shows
 * options *Object* Default {start:0, total:100}
 * callback *Function* (err, data) data - {returned: {String}, total: {String}, items:[{title:{String}, uri: {String}}]}
 
-####Returns####
+#### Returns ####
 
 *Void* undefined
 * * *
 
+### Sonos.prototype.setSpotifyRegion = function(region)
+
+Sets the Spotify Region
+#### Parameters
+
+* region *String* region service id (US: 3079, EU: 2311)
+
+#### Returns ####
+
+*Void* undefined
+* * *
+
+### Sonos.prototype.alarmClockService = function()
+
+Get an instance of the new AlarmClock service
+
+#### Returns ####
+
+*AlarmClock*
+* * *
 
 
 Search
 ------
 
-###var Search = function Search([options])###
+### var Search = function Search([options]) ###
 
 Search "Class"
 Emits 'DeviceAvailable' on a Sonos Component Discovery
 Listens on a random UDP port, or the specified port in options
 
-####Parameters####
+#### Parameters ####
 
 * Optional *Object* with options - {port: {Number}}
 * * *
@@ -462,30 +565,32 @@ Listens on a random UDP port, or the specified port in options
 search
 ------
 
-###var search = sonos.search([options], [listener])###
+### var search = sonos.search([options], [listener]) ###
 
 Create a Search Instance (emits 'DeviceAvailable' with a found Sonos Component)
 Listens on a random UDP port, or the specified port in options
 
-####Parameters####
+#### Parameters ####
 
 * Optional *Object* with options - {port: {Number}}
 * Optional *Function* 'DeviceAvailable' listener (sonos)
 
-####Returns####
+#### Returns ####
 
 {Search/EventEmitter Instance}
+
 * * *
 
 
-###Search.prototype.destroy = function(callback)###
+### Search.prototype.destroy = function(callback) ###
 
 Stops searching and destroy the Search object
-####Parameters####
+#### Parameters ####
 
 * callback *Function* ()
 
-####Returns####
+#### Returns ####
 
 *[type]* undefined
+
 * * *
