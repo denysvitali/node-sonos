@@ -58,7 +58,7 @@ Reorder tracks in queue
 
 + **options.InstanceID**: `number`, The instance you want to edit is always `0`
 
-+ **options.UpdateID**: `number`, The update id, not a qlue what this means. Just specify `0`
++ **options.UpdateID**: `number`, The update id, not a clue what this means. Just specify `0`
 
 + **options.StartingIndex**: `number`, The index of the first song you want to move.
 
@@ -67,6 +67,55 @@ Reorder tracks in queue
 + **options.InsertBefore**: `number`, Where should these tracks be inserted?
 
 **Returns**: `Object`, Parsed response data.
+
+### sonos.AVTransport.RemoveTrackFromQueue(options)
+
+Remove a single track from the queue
+
+**Parameters**:
+
+**options**: `object`, Object with required options
+
++ **options.InstanceID**: `number`, The instance you want to control is always `0`
+
++ **options.ObjectID**: `string`, The object to remove
+
++ **options.UpdateID**: `string`, The update id, not a clue what this means. Just specify `0`
+
+**Returns**: `Object`, Parsed response data.
+
+### sonos.AVTransport.RemoveTrackRangeFromQueue(options)
+
+Remove a range of tracks from the queue
+
+**Parameters**:
+
+**options**: `object`, Object with required options
+
++ **options.InstanceID**: `number`, The instance you want to control is always `0`
+
++ **options.UpdateID**: `number`, The update id, not a clue what this means. Just specify `0`
+
++ **options.StartingIndex**: `number`, Index of the first song to remove
+
++ **options.NumberOfTracks**: `number`, How many tracks to remove
+
+**Returns**: `Object`, Parsed response data.
+
+### sonos.AVTransport.Seek(options)
+
+Skip to other track or time
+
+**Parameters**:
+
+**options**: `object`, Object with required options
+
++ **options.InstanceID**: `number`, The instance you want to control is always `0`
+
++ **options.Unit**: `number`, One of these `TRACK_NR`, `REL_TIME`, `TIME_DELTA`
+
++ **options.Target**: `number`, Skip to what track number, relative time as hh:mm:ss, or ?
+
 
 ### sonos.AVTransport.SetPlayMode(playmode)
 
